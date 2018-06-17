@@ -50,6 +50,16 @@ namespace SportStore.Repositories
             basket.Quantity = 101;
             basket.CreatedDate = DateTime.Now;
             _products.Add(basket);
+
+            var volleyball = new Product();
+            volleyball.Id = GetNextId();
+            volleyball.Name = "Puma";
+            volleyball.Category = "Little";
+            volleyball.IsNew = true;
+            volleyball.Price = 18m;
+            volleyball.Quantity = 75;
+            volleyball.CreatedDate = DateTime.Now;
+            _products.Add(basket);
         }
 
         public List<Product> GetProducts()
