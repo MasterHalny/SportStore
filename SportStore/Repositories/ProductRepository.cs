@@ -59,7 +59,7 @@ namespace SportStore.Repositories
             volleyball.Price = 18m;
             volleyball.Quantity = 75;
             volleyball.CreatedDate = DateTime.Now;
-            _products.Add(basket);
+            _products.Add(volleyball);
         }
 
         public List<Product> GetProducts()
