@@ -40,6 +40,16 @@ namespace SportStore.Repositories
             trainers.Quantity = 100;
             trainers.CreatedDate = DateTime.Now;
             _products.Add(trainers);
+
+            var basket = new Product();
+            basket.Id = GetNextId();
+            basket.Name = "Nike";
+            basket.Category = "Little";
+            basket.IsNew = true;
+            basket.Price = 10m;
+            basket.Quantity = 101;
+            basket.CreatedDate = DateTime.Now;
+            _products.Add(basket);
         }
 
         public List<Product> GetProducts()
