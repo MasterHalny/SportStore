@@ -10,12 +10,14 @@ namespace SportStore
 
         static void Main(string[] args)
         {
+            _productRepository.LoadData();
+
             while (true)
             {
                 Console.Clear();
                 GetProducts();
-                //Console.Write("\n> ");
-                //Console.WriteLine("Wpisz help zeby zobaczy dostepne komendy");
+                Console.Write("\n> ");
+                Console.WriteLine("Wpisz help zeby zobaczy dostepne komendy");
 
                 Console.Write("\n> ");
                 var command = Console.ReadLine();
@@ -27,6 +29,10 @@ namespace SportStore
                 else if (command == "exit")
                 {
                     break;
+                }
+                else if (command == "save")
+                {
+                    _productRepository.SaveData();
                 }
                 else if (command == "help")
                 {                   

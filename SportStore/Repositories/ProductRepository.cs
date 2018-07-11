@@ -2,79 +2,36 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace SportStore.Repositories
 {
     public class ProductRepository
     {
-        private static List<Product> _products = new List<Product>();
-
-        public ProductRepository()
-        {
-            var ball = new Product();
-            ball.Id = GetNextId();
-            ball.Name = "Ball";
-            ball.Category = "Little";
-            ball.IsNew = true;
-            ball.Price = 5.50m;
-            ball.Quantity = 100;
-            ball.CreatedDate = DateTime.Now;
-            _products.Add(ball);
-
-            var gate = new Product();
-            gate.Id = GetNextId();
-            gate.Name = "Gate";
-            gate.Category = "Big";
-            gate.IsNew = false;
-            gate.Price = 250;
-            gate.Quantity = 8;
-            gate.CreatedDate = DateTime.Now;
-            _products.Add(gate);
-
-            var trainers = new Product();
-            trainers.Id = GetNextId();
-            trainers.Name = "Adidas";
-            trainers.Category = "Little";
-            trainers.IsNew = true;
-            trainers.Price = 199.99m;
-            trainers.Quantity = 100;
-            trainers.CreatedDate = DateTime.Now;
-            _products.Add(trainers);
-
-            var basket = new Product();
-            basket.Id = GetNextId();
-            basket.Name = "Nike";
-            basket.Category = "Little";
-            basket.IsNew = true;
-            basket.Price = 10m;
-            basket.Quantity = 101;
-            basket.CreatedDate = DateTime.Now;
-            _products.Add(basket);
-
-            var volleyball = new Product();
-            volleyball.Id = GetNextId();
-            volleyball.Name = "Puma";
-            volleyball.Category = "Little";
-            volleyball.IsNew = true;
-            volleyball.Price = 18m;
-            volleyball.Quantity = 75;
-            volleyball.CreatedDate = DateTime.Now;
-            _products.Add(volleyball);
-
-            var basketball = new Product();
-            basketball.Id = GetNextId();
-            basketball.Name = "Rebook";
-            basketball.Category = "Little";
-            basketball.IsNew = true;
-            basketball.Price = 25m;
-            basketball.Quantity = 60;
-            basketball.CreatedDate = DateTime.Now;
-            _products.Add(basketball);
-        }
+        private const string _filePath = @"J:\shop\sportsstoredb.json"; 
+        private List<Product> _products = new List<Product>();
 
         public List<Product> GetProducts()
         {
             return _products;
+        }
+
+        public void LoadData()
+        {
+            var json = File.ReadAllText(_filePath);
+            _products = JsonConvert.DeserializeObject<List<Product>>(json);
+
+            if (_products == null)
+            {
+                _products = new List<Product>(); 
+            }
+        }
+
+        public void SaveData()
+        {
+            var json = JsonConvert.SerializeObject(_products);
+            File.WriteAllText(_filePath, json);
         }
 
         public Product GetProductById(int id)
