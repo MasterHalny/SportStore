@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using System.IO;
+using SportStore.Filters;
 
 namespace SportStore.Repositories
 {
@@ -12,9 +13,26 @@ namespace SportStore.Repositories
         private const string _filePath = @"J:\shop\sportsstoredb.json"; 
         private List<Product> _products = new List<Product>();
 
-        public List<Product> GetProducts()
+        public List<Product> GetProducts(ProductsFilter productsFilter)
         {
-            return _products;
+            var query = _products.AsQueryable();
+
+            if (productsFilter.Category != "" && productsFilter.Category != null)
+            {
+                query = query.Where(product => product.Category == productsFilter.Category);
+            }
+
+            if (productsFilter.PriceFrom != 0)
+            {
+                query = query.Where(product => product.Price >= productsFilter.PriceFrom);
+            }
+
+            if (productsFilter.PriceTo != 0)
+            {
+                query = query.Where(product => product.Price <= productsFilter.PriceTo);
+            }
+
+            return query.ToList();
         }
 
         public void LoadData()

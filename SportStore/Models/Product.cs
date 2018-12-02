@@ -12,6 +12,10 @@ namespace SportStore.Models
         public int Quantity { get; set; }
         public DateTime CreatedDate { get; set; }
 
+        //tylko 5 kategori!
+
+        //zainstaluj sourcetree
+
         public string GetInfo()
         {
             return $"[{Id}] {Name} - ({Category}): {Price}";

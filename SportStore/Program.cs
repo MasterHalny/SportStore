@@ -1,12 +1,14 @@
 ﻿using System;
 using SportStore.Repositories;
 using SportStore.Models;
+using SportStore.Filters;
 
 namespace SportStore
 {
     class Program
     {
         private static ProductRepository _productRepository = new ProductRepository();
+        private static ProductsFilter _productsFilter = new ProductsFilter();
 
         static void Main(string[] args)
         {
@@ -40,6 +42,14 @@ namespace SportStore
                     Console.WriteLine("edit, delete, back, help, add, exit");
                     Console.ReadKey();
                     continue;
+                }
+                else if (command == "set-filters")
+                {
+                    SetFilters();
+                }
+                else if (command == "clear-filters")
+                {
+                    ClearFilters();
                 }
                 else if (int.TryParse(command, out int id))
                 {
@@ -79,7 +89,7 @@ namespace SportStore
 
         static void GetProducts()
         {
-            var products = _productRepository.GetProducts();
+            var products = _productRepository.GetProducts(_productsFilter);
             foreach (var product in products)
             {
                 Console.WriteLine(product.GetInfo());
@@ -139,6 +149,22 @@ namespace SportStore
         {
             _productRepository.DeleteProductById(id);
             Console.WriteLine("Produkt został pomyślnie usunięty.");
+        }
+
+        static void SetFilters()
+        {
+            Console.WriteLine("Ustawiamy filtry: ");
+
+            _productsFilter.SetCategory();
+            _productsFilter.SetPriceFrom();
+            _productsFilter.SetPriceTo();
+        }
+
+        static void ClearFilters()
+        {
+            Console.WriteLine("Czyszczenie filtrów.");
+
+            _productsFilter.ClearFilters();
         }
     }
 }
