@@ -1,35 +1,34 @@
-﻿using SportStore.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using System.IO;
-using SportStore.Filters;
+using SportStore.Domain.Models;
+using Newtonsoft.Json;
 
-namespace SportStore.Repositories
+namespace SportStore.Domain.Repositories
 {
     public class ProductRepository
     {
         private const string _filePath = @"J:\shop\sportsstoredb.json"; 
         private List<Product> _products = new List<Product>();
 
-        public List<Product> GetProducts(ProductsFilter productsFilter)
+        public List<Product> GetProducts(string category,decimal priceFrom, decimal priceTo)
         {
             var query = _products.AsQueryable();
 
-            if (productsFilter.Category != "" && productsFilter.Category != null)
+            if (category != "" && category != null)
             {
-                query = query.Where(product => product.Category == productsFilter.Category);
+                query = query.Where(product => product.Category == category);
             }
 
-            if (productsFilter.PriceFrom != 0)
+            if (priceFrom != 0)
             {
-                query = query.Where(product => product.Price >= productsFilter.PriceFrom);
+                query = query.Where(product => product.Price >=priceFrom);
             }
 
-            if (productsFilter.PriceTo != 0)
+            if (priceTo != 0)
             {
-                query = query.Where(product => product.Price <= productsFilter.PriceTo);
+                query = query.Where(product => product.Price <= priceTo);
             }
 
             return query.ToList();

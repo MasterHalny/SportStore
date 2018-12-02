@@ -1,36 +1,32 @@
-﻿using System;
+﻿using SportStore.Domain.Models;
+using System;
 
-namespace SportStore.Models
+namespace SportStore
 {
-    public class Product
+    public class ProductBuilder
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public string Category { get; set; }
-        public bool IsNew { get; set; }
-        public int Quantity { get; set; }
-        public DateTime CreatedDate { get; set; }
+        private Product _product;
 
-        //tylko 5 kategori!
-
-        //zainstaluj sourcetree
+        public ProductBuilder()
+        {
+            _product = new Product();
+        }
 
         public string GetInfo()
         {
-            return $"[{Id}] {Name} - ({Category}): {Price}";
+            return $"[{_product.Id}] {_product.Name} - ({_product.Category}): {_product.Price}";
         }
 
         public void SetName()
         {
             Console.Write("Nazwa: ");
-            Name = Console.ReadLine();
+            _product.Name = Console.ReadLine();
         }
 
         public void SetCategory()
         {
             Console.Write("Kategoria: ");
-            Category = Console.ReadLine();
+            _product.Category = Console.ReadLine();
         }
 
         public void SetPrice()
@@ -40,7 +36,7 @@ namespace SportStore.Models
                 Console.Write("Cena: ");
                 if (decimal.TryParse(Console.ReadLine(), out decimal price))
                 {
-                    Price = price;
+                    _product.Price = price;
                     break;
                 }
                 else
@@ -58,7 +54,7 @@ namespace SportStore.Models
                 Console.Write("Ilosc: ");
                 if (int.TryParse(Console.ReadLine(), out int quantity))
                 {
-                    Quantity = quantity;
+                    _product.Quantity = quantity;
                     break;
                 }
                 else
@@ -77,12 +73,12 @@ namespace SportStore.Models
                 var isNew = Console.ReadLine();
                 if (isNew == "T")
                 {
-                    IsNew = true;
+                    _product.IsNew = true;
                     break;
                 }
                 else if (isNew == "N")
                 {
-                    IsNew = false;
+                    _product.IsNew = false;
                     break;
                 }
                 else
@@ -91,6 +87,11 @@ namespace SportStore.Models
                     continue;
                 }
             }
+        }
+
+        public Product Build()
+        {
+            return _product;
         }
     }
 }

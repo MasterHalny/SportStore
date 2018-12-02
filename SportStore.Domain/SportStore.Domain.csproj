@@ -1,12 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SportStore.Domain\SportStore.Domain.csproj" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
 </Project>

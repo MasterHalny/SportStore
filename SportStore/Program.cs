@@ -1,6 +1,5 @@
 ﻿using System;
-using SportStore.Repositories;
-using SportStore.Models;
+using SportStore.Domain.Repositories;
 using SportStore.Filters;
 
 namespace SportStore
@@ -89,7 +88,7 @@ namespace SportStore
 
         static void GetProducts()
         {
-            var products = _productRepository.GetProducts(_productsFilter);
+            var products = _productRepository.GetProducts(_productsFilter.Category, _productsFilter.PriceFrom, _productsFilter.PriceTo);
             foreach (var product in products)
             {
                 Console.WriteLine(product.GetInfo());
@@ -121,13 +120,14 @@ namespace SportStore
         {
             Console.WriteLine("Dodawanie nowego produktu:");
 
-            var product = new Product();
-            product.SetName();
-            product.SetCategory();
-            product.SetIsNew();
-            product.SetPrice();
-            product.SetQuantity();
+            var builder = new ProductBuilder();
+            builder.SetName();
+            builder.SetCategory();
+            builder.SetIsNew();
+            builder.SetPrice();
+            builder.SetQuantity();
 
+            var product = builder.Build();
             _productRepository.AddProduct(product.Name, product.Category, product.IsNew, product.Price, product.Quantity);
         }
 
@@ -135,13 +135,15 @@ namespace SportStore
         {
             Console.WriteLine("Edytowanie produktu:");
 
-            var product = new Product();
-            product.SetName();
-            product.SetCategory();
-            product.SetIsNew();
-            product.SetPrice();
-            product.SetQuantity();
+            var builder = new ProductBuilder();
+            builder.SetName();
+            builder.SetCategory();
+            builder.SetIsNew();
+            builder.SetPrice();
+            builder.SetQuantity();
 
+            //Dokonczyc na podstawie add product!
+            var product = builder.Build();
             _productRepository.EditProduct(id, product.Name, product.Category, product.IsNew, product.Price, product.Quantity);
         }
 
