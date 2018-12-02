@@ -2,79 +2,54 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using System.IO;
+using SportStore.Filters;
 
 namespace SportStore.Repositories
 {
     public class ProductRepository
     {
-        private static List<Product> _products = new List<Product>();
+        private const string _filePath = @"J:\shop\sportsstoredb.json"; 
+        private List<Product> _products = new List<Product>();
 
-        public ProductRepository()
+        public List<Product> GetProducts(ProductsFilter productsFilter)
         {
-            var ball = new Product();
-            ball.Id = GetNextId();
-            ball.Name = "Ball";
-            ball.Category = "Little";
-            ball.IsNew = true;
-            ball.Price = 5.50m;
-            ball.Quantity = 100;
-            ball.CreatedDate = DateTime.Now;
-            _products.Add(ball);
+            var query = _products.AsQueryable();
 
-            var gate = new Product();
-            gate.Id = GetNextId();
-            gate.Name = "Gate";
-            gate.Category = "Big";
-            gate.IsNew = false;
-            gate.Price = 250;
-            gate.Quantity = 8;
-            gate.CreatedDate = DateTime.Now;
-            _products.Add(gate);
+            if (productsFilter.Category != "" && productsFilter.Category != null)
+            {
+                query = query.Where(product => product.Category == productsFilter.Category);
+            }
 
-            var trainers = new Product();
-            trainers.Id = GetNextId();
-            trainers.Name = "Adidas";
-            trainers.Category = "Little";
-            trainers.IsNew = true;
-            trainers.Price = 199.99m;
-            trainers.Quantity = 100;
-            trainers.CreatedDate = DateTime.Now;
-            _products.Add(trainers);
+            if (productsFilter.PriceFrom != 0)
+            {
+                query = query.Where(product => product.Price >= productsFilter.PriceFrom);
+            }
 
-            var basket = new Product();
-            basket.Id = GetNextId();
-            basket.Name = "Nike";
-            basket.Category = "Little";
-            basket.IsNew = true;
-            basket.Price = 10m;
-            basket.Quantity = 101;
-            basket.CreatedDate = DateTime.Now;
-            _products.Add(basket);
+            if (productsFilter.PriceTo != 0)
+            {
+                query = query.Where(product => product.Price <= productsFilter.PriceTo);
+            }
 
-            var volleyball = new Product();
-            volleyball.Id = GetNextId();
-            volleyball.Name = "Puma";
-            volleyball.Category = "Little";
-            volleyball.IsNew = true;
-            volleyball.Price = 18m;
-            volleyball.Quantity = 75;
-            volleyball.CreatedDate = DateTime.Now;
-            _products.Add(volleyball);
-
-            var basketball = new Product();
-            basketball.Id = GetNextId();
-            basketball.Name = "Rebook";
-            basketball.Category = "Little";
-            basketball.IsNew = true;
-            basketball.Price = 25m;
-            basketball.Quantity = 60;
-            basketball.CreatedDate = DateTime.Now;
-            _products.Add(basketball);
+            return query.ToList();
         }
 
-        public List<Product> GetProducts()
+        public void LoadData()
         {
-            return _products;
+            var json = File.ReadAllText(_filePath);
+            _products = JsonConvert.DeserializeObject<List<Product>>(json);
+
+            if (_products == null)
+            {
+                _products = new List<Product>(); 
+            }
+        }
+
+        public void SaveData()
+        {
+            var json = JsonConvert.SerializeObject(_products);
+            File.WriteAllText(_filePath, json);
         }
 
         public Product GetProductById(int id)
